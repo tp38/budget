@@ -1,0 +1,41 @@
+@startuml 'classes relatives à accountPanel'
+
+interface AccountPanelCallBack #LightGreen {
+    + onCall( int x, int y, String msg )
+}
+
+class JPanel #PaleVioletRed
+class AccountSummaryPanel #LightGreen {
+    + AccountSummaryPanel( RelaxDb db, AccountPanelCallBack cb )
+    - getTableModelFor( Calendar cal ) : AccountSummaryTableModel
+}
+
+class DateSelector #LightGreen {
+    + addActionListener( ActionListener l) : void
+    + getDate() : Calendar
+    + getLastDayofMonth() : Calendar
+}
+
+class AccountSummaryTableView #LightGreen {
+    + setUpTableData( AccountSummaryTableModel newModel ) : void
+}
+
+class RelaxDB #LightGreen {
+    + getAccountList() : Result[]
+    + getAccountSummary( String key, Calendar day ) : AccountSummary
+}
+
+AccountPanelCallBack <- AccountSummaryPanel
+AccountSummaryPanel -up-|> JPanel
+AccountSummaryPanel "ds" *-- DateSelector
+AccountSummaryPanel "tableView" *-- AccountSummaryTableView
+AccountSummaryPanel "db" *- RelaxDB
+
+interface ActionListener #PaleVioletRed
+class btnActionListener #LightGreen
+btnActionListener ..|> ActionListener
+AccountSummaryPanel *-- btnActionListener
+
+
+
+@enduml

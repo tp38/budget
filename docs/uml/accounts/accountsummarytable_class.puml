@@ -1,0 +1,56 @@
+@startuml 'classes account'
+
+interface AccountPanelCallBack #LightGreen {
+    + onCall( int x, int y, String msg )
+}
+
+class AbstractTableModel #PaleVioletRed 
+class JTable<AccountSummaryTableModel> #PaleVioletRed {
+    - selectionMode = TableSelectionModel.SINGLE_SELECTION
+}
+class JPanel #PaleVioletRed 
+'interface TableSelectionListener #PaleVioletRed
+
+class Vector #Wheat
+
+class AccountSummary #LightGreen {
+    - key : String[]
+    - value : float[]
+}
+
+class AccountSummaryTableModel #LightGreen 
+
+class AccountSummaryTableView #LightGreen {
+    - parent : JFrame
+    - cb : CallBack
+    + setUpTableData( AccountSummaryTableModel newModel )
+}
+
+class AccountSummaryTableRenderer  
+
+class ASTVListener #LightGreen
+interface ListSelectionListener #PaleVioletRed {
+    void valueChanged( ListSelectionListener e )
+}
+ASTVListener ..|> ListSelectionListener
+
+class DefaultTableCellRenderer #PaleVioletRed
+
+class AccountSummaryTableRenderer #LightGreen
+
+
+AccountSummaryTableView -up-|> JPanel 
+
+AccountSummaryTableModel --> AccountSummary
+AbstractTableModel <|- AccountSummaryTableModel
+AbstractTableModel --> Vector
+AccountSummaryTableView "model" *-- AccountSummaryTableModel
+AccountSummaryTableView "account_table" *- JTable
+JTable --> AccountSummaryTableRenderer
+JTable --> ASTVListener
+
+ASTVListener --> AccountPanelCallBack
+
+AccountSummaryTableRenderer --|> DefaultTableCellRenderer
+
+@enduml

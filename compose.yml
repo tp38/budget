@@ -1,0 +1,18 @@
+services:
+  mockserver:
+    image: mockserver/mockserver:7.1.0
+    ports:
+      - "1080:1080"
+    volumes:
+      - ./mock_server:/expectations/
+    environment:
+      - "MOCKSERVER_PERSIST_EXPECTATIONS=true"
+      - "MOCKSERVER_PERSIST_RECORDED_EXPECTATIONS=true"
+      - "MOCKSERVER_INITIALIZATION_JSON_PATH=persistedExpectations.json"
+      - "MOCKSERVER_PERSISTED_EXPECTATIONS_PATH=persistedExpectations.json"
+      # - "MOCKSERVER_PERSISTED_RECORDED_EXPECTATIONS_PATH=persistedRecordedExpectations.json"
+#  app:
+#    image: my-app:latest
+#    depends_on:
+#      mockserver:
+#        condition: service_healthy
