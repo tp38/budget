@@ -1,3 +1,4 @@
 .mvn
-
+*.code-workspace
 target
+temp

@@ -1,0 +1,113 @@
+@startuml 'global classes'
+
+class Vector #Wheat
+class JPanel #PaleVioletRed
+class JButton #PaleVioletRed
+class JLabel #PaleVioletRed
+class JList<RelaxDbListModel> #PaleVioletRed {
+    - selectionMode = ListSelectionModel.SINGLE_SELECTION
+}
+class AbstractListModel #PaleVioletRed
+class URI #LightBlue
+
+interface ListSelectionListener #PaleVioletRed
+
+interface ActionListener #LightCyan {
+    + abstract actionPerformed( ActionEvent ) : void
+}
+
+interface ListCellRenderer #PaleVioletRed
+
+class RelaxDbListModel {
+    + RelaxDbListModel()
+}
+
+class Credential #LightGreen {
+    - login : String
+    - pwd : String
+    + {static} isLoginValid( String l ) : boolean
+    + {static} isPasswordValid( String p ) : boolean
+    + getBasicAuth() : String
+}
+
+class RelaxDb #LightGreen {
+    + setUri( URI u )
+    + setCredential( Credential c)
+}
+
+class RelaxDbListModel #LightGreen
+
+class RelaxDbListView {
+    - Frame parent
+    - boolean valid = false
+}
+
+class CredentialDialog #LightGreen {
+    - JTextField login_text
+    - JPasswordField pwd_text
+    - JButton valid_btn
+    - JButton cancel_btn
+    - Credential cred
+    - boolean valid
+    + getCredential() : Credential
+    + isCredentialValid() : boolean
+}
+
+class RelaxDbListSelectionListener #LightGreen
+
+class RelaxDbActionListener #LightGreen
+
+class RelaxDbListView #LightGreen
+
+class DbCellRenderer #LightGreen
+
+
+class CredentialDialogListener #LightGreen {
+    + actionPerformed( ActionEvent e ) : void
+}
+RelaxDbListModel -* "model" RelaxDbListView
+
+RelaxDbListModel -up-|> AbstractListModel
+RelaxDbListModel --> RelaxDb
+RelaxDbListModel -left-> Vector
+RelaxDb "url" *-left- URI
+RelaxDb "cred" *-- Credential
+JList -left-> RelaxDbListSelectionListener
+
+note top of RelaxDbListSelectionListener
+should open a credential dialog,
+produce a credential object
+and update the selected relaxdb with it
+end note
+
+RelaxDbListSelectionListener .down.|> ListSelectionListener
+
+RelaxDbListView -up-|> JPanel
+RelaxDbListView "db_list" *-- JList
+RelaxDbListView "connect_btn" *- JButton
+
+JButton -> RelaxDbActionListener
+RelaxDbActionListener .up.|> ActionListener
+
+note right of RelaxDbActionListener
+should set valid flag to true 
+that indicate data are valid 
+(current/selected relaxdb 
+have correct credential) 
+and accessible.
+end note
+
+JList --> DbCellRenderer
+DbCellRenderer -right-|> JLabel
+DbCellRenderer .down.|> ListCellRenderer
+
+Credential -[hidden] JList
+
+RelaxDbListSelectionListener -left-> CredentialDialog
+
+Credential <- CredentialDialog
+
+CredentialDialog --> CredentialDialogListener
+
+
+@enduml

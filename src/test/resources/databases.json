@@ -1,0 +1,13 @@
+[ {
+  "url" : "http://localhost:5984/budget_dev/",
+  "credential" : {
+      "login" : "nologin",
+      "pwd" : "nopassword"
+  }
+}, {
+  "url" : "http://yoda:5984/budget/",
+  "credential" : {
+      "login" : "nologin",
+      "pwd" : "nopassword"
+  }
+} ]

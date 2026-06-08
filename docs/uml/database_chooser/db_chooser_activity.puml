@@ -1,0 +1,75 @@
+@startuml 'database choise activity'
+
+start
+
+:read db from file;
+note right
+from resources/db.json 
+and produce a DbListModel
+end note
+:{{salt
+    {
+    <b> Db List Panel
+    {T!
+        budget | ( yoda )
+        budget | ( localhost )
+    }
+    [ <color:#9a9a9a>connect ]
+    }
+}};
+note right
+with : 
+- one jlist : to select one db. 
+    add a ListSelectionListener which call
+    a login-pwd dialog. Paint line in blue 
+    when select
+- one jbutton : to valid entered data.
+    add an actionListener which set the
+    status to OK. this buton  is disable 
+    by default
+end note
+split 
+    repeat
+        :{{salt
+        {
+        <b>credential dialog
+        {T
+        login : | <color:grey>"your login here "
+        password : | <color:grey>" your password here" 
+        }
+        [ valid ]
+        }
+        }};
+        note left
+        display this dialog when a db is selected.
+        end note
+    backward: clear field and
+    put error msg;
+    repeat while (valid button pressed and credentials are ok ?) 
+    :update credential 
+    for the current db;
+    :{{salt
+    {
+    <b> Db List Panel
+    {T!
+        <color:blue>budget | <color:blue>( yoda )
+        budget | ( localhost )
+    }
+    [ connect ]
+    }
+    }};
+    note right
+    enable connect_btn
+    end note
+    detach
+split again
+    :connect buton pressed;
+    note right
+    set valid status to OK
+    and register the current db
+    end note
+    stop
+end split
+
+
+@enduml
