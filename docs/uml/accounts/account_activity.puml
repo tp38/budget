@@ -1,0 +1,172 @@
+@startuml 'account activity'
+
+start
+
+:retrieve account list;
+repeat
+: retrieve account summary;
+repeat while ( more account ?)
+:{{salt
+{
+    display account summary <b>jlist :
+    .
+
+    {+
+        {/ <b>Comptes | Categories | Recherche | Logout }
+        {
+            { ^2026-05-25^ }
+            {.
+                |. |= <&check> |= <&loop-circular> |= <&timer>
+                | BSA_CC_Nat | <color:blue>60.19 | <color:orange>60.19 | <color:grey>50.69
+                | BSA_CC_Th | <color:blue>95.73 | <color:orange>81.83 | <color:grey>60.74
+                | LaBP_CC_Joint | <color:blue>209.11 | <color:orange>166.70 | <color:grey>50.14
+                | LaBP_LA_Nat | <color:blue>8361.05 | <color:orange>8361.05 | <color:grey>8361.05
+                | LaBP_LA_Th | <color:blue>8942.21 | <color:orange>8942.21 | <color:grey>8942.21
+            }
+        }
+    }
+
+}
+}};
+note
+when selecting a line go to 
+op_summary_list below
+end note
+:set end_date=
+    datepicker.year+
+    datepicker.month+
+    monthrange(datepicker.month);
+:set selected_account;
+:set status_mode=done+upcoming;
+repeat
+    :get op list;
+    note
+    depending of 
+    - selected_account
+    - end_date
+    - status_mode
+    end note
+    :{{salt
+    {
+        show operation summary <b>jlist :
+        .
+
+        {+
+            {/ <b>Comptes | Categories | Recherche | Logout }
+            {
+                {.
+                | [<&list>] | [<&check>] | [<&fire>] | [<&loop-circular>] | [<&timer>] | . . . . . . . . . . . . . . . . .  | [<&plus>] |
+                }
+                {+
+                | <color:grey>valeur | <color:grey>: | <color:grey>2026-05-31 | ...... | <color:grey>CBi | . | <color:grey>-66.56 
+                | <color:grey>LaBP_CC_Joint | <color:grey><&arrow-thick-right>| <color:grey>@Inconnu |*
+                | <color:grey>.#Courses enveloppe |*
+                }
+                {+
+                | <color:orange>valeur | <color:orange>: | <color:orange>2026-05-25 | ...... | <color:orange>CBi | . | <color:orange>-69.69 
+                | <color:orange>LaBP_CC_Joint | <color:orange><&arrow-thick-right>| <color:orange>@Ibis |*
+                | <color:orange>.#Loisirs enveloppe+ |*
+                }
+                {+
+                | <color:blue>valeur | <color:blue>: | <color:blue>2026-05-18 | ...... | <color:blue>CBi | . | <color:blue>-15.27 
+                | <color:blue>LaBP_CC_Joint | <color:blue><&arrow-thick-right>| <color:blue>@LeroyMerlin |*
+                | <color:blue>.#Travaux enveloppe |*
+                }
+            }
+        }
+
+    }
+    }};
+    note
+    Each line of the jlist is an 
+    OperationInlineView draw within 
+    a specific ListCellRenderer.
+
+    A specific ListSelectionListener is 
+    use to open a Operation_dialog
+    end note
+    switch (action ?)
+    case (another menu_item select)
+        end
+    case ( add button ? )
+        :set default values;
+        label fake_label0
+        label operation_form
+        :{{salt
+        {
+         display operation_dialog : 
+         .
+        {^ "Operation Dialog"
+        .
+            .{+ 
+            A vérifier : [] | Projet :
+            . | "             "
+            Réalisation : | Moyen :
+            "25/05/2026     <&calendar>" | ^CBi      ^
+            Commentaire : |*
+            ".#Cadeaux enveloppe" |*
+            }.
+            .
+            .{+
+                {
+                |Émetteur : | [<&chevron-right>]
+                |"LaBP_CC_Joint" |*
+                |{#
+                    |Total | <b>-70.00 |.
+                    |Cadeaux | -50.00 | <color:blue><&trash> 
+                    |Thierry | -20.00 | <color:blue><&trash>  
+                }|*
+                .
+                {
+                | ^Autres^ | "0.0" | [<&plus>]
+                }
+                }
+
+            }|*
+            .
+            .{+
+                {
+                |Destinataire :  |*
+                |"@Inconnu             " |*
+                |{#
+                |Total | <b>70.00 |.
+                |Cadeaux | 50.00 | <color:blue><&trash> 
+                |Thierry | 20.00 | <color:blue><&trash>  
+                }|*
+                .
+                {
+                | ^Autres^ | "0.0" | [<&plus>]
+                }
+                }
+            }|*
+            .
+            .{+
+            État : | Périodicité :
+            ^A venir^ | ^Aucune^
+            }.
+            .{
+            [ Valider] | [ Annuler]
+            }.
+        }
+
+        }
+        }}
+        ;
+    case ( modify op ? )
+        : get operation values;
+        goto operation_form
+    case (status mode buttons ?) 
+        : set new status_mode; 
+        note right
+        one of this buttons :
+        - <&list> : all ops 
+        - <&check> : check 
+        - <&fire> : running 
+            (done+upcoming) 
+        - <&loop-circular> : done
+        - <&timer> : upcoming
+        end note      
+    endswitch
+repeat while
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml 'classes account'
+
+class AbstractTableModel #PaleVioletRed 
+class JTable<AccountSummaryTableModel> #PaleVioletRed {
+    - selectionMode = TableSelectionModel.SINGLE_SELECTION
+}
+class JPanel #PaleVioletRed 
+interface TableSelectionListener #PaleVioletRed
+
+class Vector #Wheat
+
+class AccountSummary #LightGreen {
+    - key : String[]
+    - value : float[]
+}
+
+class AccountSummaryTableModel #LightGreen
+
+class AccountSummaryTableView {
+    - parent : JFrame
+}
+
+class AccountSummaryCellRenderer  
+
+AccountSummaryTableView -up-|> JPanel 
+
+AccountSummaryTableModel --> AccountSummary
+AbstractTableModel <|- AccountSummaryTableModel
+AbstractTableModel --> Vector
+AccountSummaryTableView "model" *-left- AccountSummaryTableModel
+AccountSummaryTableView "account_table" *- JTable
+JTable -> AccountSummarySelectionListener
+AccountSummarySelectionListener .up.|> TableSelectionListener
+JTable --> AccountSummaryCellRenderer
+
+AccountSummaryCellRenderer ..|> TableCellRenderer
+AccountSummaryCellRenderer -|> JLabel
+
+@enduml
