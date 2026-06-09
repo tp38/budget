@@ -22,6 +22,10 @@ class AccountSummaryTableView {
 
 class AccountSummaryCellRenderer  
 
+class DefaultTableCellRenderer #PaleVioletRed
+
+class AccountSummaryCellRenderer #LightGreen
+
 AccountSummaryTableView -up-|> JPanel 
 
 AccountSummaryTableModel --> AccountSummary
@@ -33,7 +37,6 @@ JTable -> AccountSummarySelectionListener
 AccountSummarySelectionListener .up.|> TableSelectionListener
 JTable --> AccountSummaryCellRenderer
 
-AccountSummaryCellRenderer ..|> TableCellRenderer
-AccountSummaryCellRenderer -|> JLabel
+AccountSummaryCellRenderer --|> DefaultTableCellRenderer
 
 @enduml

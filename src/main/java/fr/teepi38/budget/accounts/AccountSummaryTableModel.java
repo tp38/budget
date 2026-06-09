@@ -5,11 +5,12 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
 public class AccountSummaryTableModel extends AbstractTableModel {
-    private String[] columnNames = { "Compte", "Pointé", "Réalisé", "A venir" };
+    private String[] columnNames = { "", "Pointés", "Réalisés", "A venir" };
     private Object[][] data;
 
 
     public AccountSummaryTableModel( Vector<AccountSummary> init_data ) {
+
         data = new Object[ init_data.size()][4];
         for( Integer i = 0; i < init_data.size() ; i ++ ) {
             AccountSummary input = init_data.get(i); 
@@ -22,6 +23,10 @@ public class AccountSummaryTableModel extends AbstractTableModel {
 
     public int getColumnCount() {
         return columnNames.length;
+    }
+
+    public String getColumnName( int col ) {
+        return columnNames[col];
     }
 
     public int getRowCount() {
