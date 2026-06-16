@@ -3,11 +3,13 @@ package fr.teepi38.budget.accounts;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Vector;
 
 import javax.swing.JFrame;
-
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
@@ -94,7 +96,24 @@ public class AccountSummaryTableViewTests {
     throws InterruptedException 
     {
         ff.table("account_table").requireVisible();
-        Thread.sleep(10000);
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void shouldOpenTheRegisteredListener() {
+        JTable table = ff.table("account_table").target();
+        table.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if( ! e.getValueIsAdjusting() ) {
+                    int row = table.getSelectedRow();
+                    String account = table.getValueAt(row, 0).toString();
+                    JOptionPane.showMessageDialog( null, row + ",0 : " + account );
+                }
+            }
+        } );
+        ff.table("account_table").selectRows(1);
+        ff.optionPane().requireMessage("1,0 : BSA_CC_Th");
     }
 
     @AfterEach

@@ -37,6 +37,7 @@ public class AccountSummaryTableView extends JPanel {
         account_table.getColumnModel().getColumn(1).setPreferredWidth(100);
         account_table.getColumnModel().getColumn(2).setPreferredWidth(100);
         account_table.getColumnModel().getColumn(3).setPreferredWidth(100);
+        account_table.setShowGrid(false);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         AccountSummaryTableRenderer renderer = new AccountSummaryTableRenderer();
@@ -67,7 +68,11 @@ public class AccountSummaryTableView extends JPanel {
             if( column == 0 ) { text = (String)value; setHorizontalAlignment(SwingConstants.LEFT); }
             else { text = ((Float)value).toString(); setHorizontalAlignment( SwingConstants.RIGHT ); }
             setBorder( BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            setFont( new Font("C59", Font.PLAIN, 14) );
+            if( isSelected ) {
+                setFont( new Font("C59", Font.BOLD, 14) );
+            } else {
+                setFont( new Font("C59", Font.PLAIN, 14) );
+            }
             setText(text);
 
             return this;
