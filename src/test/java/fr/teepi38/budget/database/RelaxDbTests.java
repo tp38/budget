@@ -58,37 +58,37 @@ public class RelaxDbTests {
         String[] key = { "LaBP_LEP_Th" };
         Float[] value = { 6245.27f, 8725.69f, 12485.10f};
 
-        AccountSummary r = AccountSummary.builder().key( key ).value( value ).build();
+        // AccountSummary r = AccountSummary.builder().key( key ).value( value ).build();
 
-        AccountSummary[] rr = new AccountSummary[1];
-        rr[0] = r;
+        // AccountSummary[] rr = new AccountSummary[1];
+        // rr[0] = r;
 
-        HashMap<String,AccountSummary[]> hashmap = new HashMap<>();
-        hashmap.put("rows", rr); 
+        // HashMap<String,AccountSummary[]> hashmap = new HashMap<>();
+        // hashmap.put("rows", rr); 
 
-        String body = null;
-        try {
-            body = om.writeValueAsString( hashmap );
-        } catch (Exception e) {
-            fail( "Exception occurs : " + e.getMessage() );
-        }
+        // String body = null;
+        // try {
+        //     body = om.writeValueAsString( hashmap );
+        // } catch (Exception e) {
+        //     fail( "Exception occurs : " + e.getMessage() );
+        // }
 
-        // set mock server
-        String start_key = String.format( "[\"%s\",\"%d\",\"%d\"]", key[0], 2023, 12 );
-        String end_key = String.format(  "[\"%s\",\"%d\",\"%d\"]", key[0], today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1 );
-        client
-            .when( 
-                request()
-                    .withPath("/budget/_design/transferts/_view/by_endpoints")
-                    .withHeaders( header( "Authorization", auth_string ) )
-                    .withQueryStringParameter("start_key", start_key )
-                    .withQueryStringParameter("end_key", end_key )
-                    .withQueryStringParameter("reduce", "true" )
-                    .withQueryStringParameter("group_level", "1" )
-                    .withQueryStringParameter("inclusive_end", "true" )
-            ).respond( 
-                response().withStatusCode(201).withBody( body ) 
-            );
+        // // set mock server
+        // String start_key = String.format( "[\"%s\",\"%d\",\"%d\"]", key[0], 2023, 12 );
+        // String end_key = String.format(  "[\"%s\",\"%d\",\"%d\"]", key[0], today.get(Calendar.YEAR), today.get(Calendar.MONTH)+1 );
+        // client
+        //     .when( 
+        //         request()
+        //             .withPath("/budget/_design/transferts/_view/by_endpoints")
+        //             .withHeaders( header( "Authorization", auth_string ) )
+        //             .withQueryStringParameter("start_key", start_key )
+        //             .withQueryStringParameter("end_key", end_key )
+        //             .withQueryStringParameter("reduce", "true" )
+        //             .withQueryStringParameter("group_level", "1" )
+        //             .withQueryStringParameter("inclusive_end", "true" )
+        //     ).respond( 
+        //         response().withStatusCode(201).withBody( body ) 
+        //     );
 
         AccountSummary expected_as = AccountSummary.builder().key( key ).value(value).build();
         try {
@@ -119,27 +119,27 @@ public class RelaxDbTests {
 
         Result[] expected_account_list = new Result[] { r, r1, r2 };
 
-        HashMap<String,Object> hm = new HashMap<>();
-        hm.put("total_rows", expected_account_list.length );
-        hm.put("offset", 0);
-        hm.put("rows", expected_account_list ); 
+        // HashMap<String,Object> hm = new HashMap<>();
+        // hm.put("total_rows", expected_account_list.length );
+        // hm.put("offset", 0);
+        // hm.put("rows", expected_account_list ); 
 
-        String body = null;
-        try {
-            body = om.writeValueAsString( hm );
-        } catch (Exception e) {
-            fail( "Exception occurs : " + e.getMessage() );
-        }
+        // String body = null;
+        // try {
+        //     body = om.writeValueAsString( hm );
+        // } catch (Exception e) {
+        //     fail( "Exception occurs : " + e.getMessage() );
+        // }
 
-        // set mock server
-        client
-            .when( 
-                request()
-                    .withPath("/budget/_design/endpoints/_view/family")
-                    .withHeaders( header( "Authorization", auth_string ) )
-            ).respond( 
-                response().withStatusCode(201).withBody( body ) 
-            );
+        // // set mock server
+        // client
+        //     .when( 
+        //         request()
+        //             .withPath("/budget/_design/endpoints/_view/family")
+        //             .withHeaders( header( "Authorization", auth_string ) )
+        //     ).respond( 
+        //         response().withStatusCode(201).withBody( body ) 
+        //     );
 
         try {
             Result[] list = db.getAccountList();
