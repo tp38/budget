@@ -96,7 +96,7 @@ public class AccountSummaryTableViewTests {
     throws InterruptedException 
     {
         ff.table("account_table").requireVisible();
-        Thread.sleep(2000);
+        Thread.sleep(10000);
     }
 
     @Test
@@ -107,8 +107,9 @@ public class AccountSummaryTableViewTests {
             public void valueChanged(ListSelectionEvent e) {
                 if( ! e.getValueIsAdjusting() ) {
                     int row = table.getSelectedRow();
+                    int col = table.getSelectedColumn();
                     String account = table.getValueAt(row, 0).toString();
-                    JOptionPane.showMessageDialog( null, row + ",0 : " + account );
+                    JOptionPane.showMessageDialog( null, row + "," + col + " : " + account );
                 }
             }
         } );

@@ -1,0 +1,18 @@
+@startuml 'classes relatives à accountPanel'
+
+class AccountSummaryPanel
+
+class DateSelector #LightGreen
+
+class AccountSummaryTableView #LightGreen
+
+class RelaxDB {
+    + getAccountList() : String[]
+    + getAccountSummary( String key, DateSelector d ) : AccountSummary
+}
+
+AccountSummaryPanel "ds" *-- DateSelector
+AccountSummaryPanel "ast" *-- AccountSummaryTableView
+AccountSummaryPanel -> RelaxDB
+
+@enduml

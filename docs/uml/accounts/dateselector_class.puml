@@ -1,0 +1,14 @@
+@startuml 'classes dateselector'
+
+class DateSelector #LightGreen
+class JPanel #PaleVioletRed
+class JSpinner #PaleVioletRed
+class JButton #PaleVioletRed
+class SpinnerDateModel #PaleVioletRed
+
+DateSelector -up-|> JPanel
+DateSelector --> JSpinner
+DateSelector --> JButton
+DateSelector --> SpinnerDateModel
+
+@enduml

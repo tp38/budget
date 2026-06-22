@@ -1,6 +1,5 @@
 package fr.teepi38.budget.accounts;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -21,11 +20,12 @@ public class AccountSummaryTableView extends JPanel {
     JTable account_table;
 
     public AccountSummaryTableView( JFrame parent, AccountSummaryTableModel model ) {
-        super( new BorderLayout() );
+        super();
         this.parent = parent;
         this.model = model;
 
         setName( "accounts_pnl" );
+
 
         account_table = new JTable(model);
         account_table.setName( "account_table" );
@@ -46,7 +46,7 @@ public class AccountSummaryTableView extends JPanel {
 
         account_table.setPreferredScrollableViewportSize(account_table.getPreferredSize());
         JScrollPane pane = new JScrollPane( account_table );
-        add( pane, BorderLayout.CENTER );
+        add(pane);
     }
     
     class AccountSummaryTableRenderer extends DefaultTableCellRenderer {
