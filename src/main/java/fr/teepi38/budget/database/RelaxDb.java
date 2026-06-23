@@ -10,6 +10,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -67,42 +68,45 @@ public class RelaxDb {
      */
     @JsonIgnore
     public Result[] getAccountList() throws Exception {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(url.toString() + "/_design/endpoints/_view/family").newBuilder();
-        String u = urlBuilder.build().toString();
+        HttpUrl b = HttpUrl.parse(url.toString() + "/_design/endpoints/_view/family");
+        if( b != null ) {
+            HttpUrl.Builder urlBuilder = b.newBuilder();
+            String u = urlBuilder.build().toString();
+            Request request = new Request.Builder()
+                .url( u )
+                .header("Authorization", credential.getBasicAuth() )
+                .build();
+            
+            OkHttpClient client = new OkHttpClient.Builder().build();
 
-        Request request = new Request.Builder()
-            .url( u )
-            .header("Authorization", credential.getBasicAuth() )
-            .build();
-        
-        OkHttpClient client = new OkHttpClient.Builder().build();
+            Response response = client.newCall(request).execute();
 
-        Response response = client.newCall(request).execute();
+            ObjectMapper mapper = new ObjectMapper();
+            ResponseBody rbody = response.body();
+            if( rbody != null ) {
+                String body = rbody.string();
+                JsonNode nodes = mapper.readTree( body );
 
-        ObjectMapper mapper = new ObjectMapper();
-        String body = response.body().string();
+                if( nodes.isObject() ) {
+                    JsonNode len_nodes = nodes.get( "total_rows" );
+                    int len = len_nodes.asInt();
+                    Result[] result = new Result[ len ];
 
-        // System.out.println( "request getAccountList : " + u.toString() );
-        // System.out.println( "body getAccountList : " + body );
-
-        JsonNode nodes = mapper.readTree( body );
-        if( nodes.isObject() ) {
-            JsonNode len_nodes = nodes.get( "total_rows" );
-            int len = len_nodes.asInt();
-            Result[] result = new Result[ len ];
-
-            JsonNode rows = nodes.get( "rows" );
-            int i = 0;
-            for( JsonNode r : rows ) {
-                Result a = Result.builder()
-                    .id(r.get("id").asText() )
-                    .key( r.get("key").asText() )
-                    .value( r.get("value").asText() )
-                    .build();
-                result[i] = a;
-                i ++;
+                    JsonNode rows = nodes.get( "rows" );
+                    int i = 0;
+                    for( JsonNode r : rows ) {
+                        Result a = Result.builder()
+                            .id(r.get("id").asText() )
+                            .key( r.get("key").asText() )
+                            .value( r.get("value").asText() )
+                            .build();
+                        result[i] = a;
+                        i ++;
+                    }
+                    return result;
+                }
             }
-            return result;
+
         }
         return null;
     }
@@ -137,44 +141,47 @@ public class RelaxDb {
      */
     @JsonIgnore
     public AccountSummary getSummaryForAccount( String account, Calendar day ) throws Exception {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(url.toString() + "/_design/transferts/_view/by_endpoints").newBuilder();
-        urlBuilder.addQueryParameter("start_key", String.format( "[\"%s\",\"%d\",\"%d\"]", account, 2023, 12 ) );
-        urlBuilder.addQueryParameter("end_key", String.format(  "[\"%s\",\"%d\",\"%d\"]", account, day.get(Calendar.YEAR), day.get(Calendar.MONTH)+1 ) );
-        urlBuilder.addQueryParameter("reduce", "true");
-        urlBuilder.addQueryParameter("group_level", "1");
-        urlBuilder.addQueryParameter("inclusive_end", "true");
+        HttpUrl a = HttpUrl.parse(url.toString() + "/_design/transferts/_view/by_endpoints");
+        if( a != null ) {
+            HttpUrl.Builder urlBuilder = a.newBuilder();
+            urlBuilder.addQueryParameter("start_key", String.format( "[\"%s\",\"%d\",\"%d\"]", account, 2023, 12 ) );
+            urlBuilder.addQueryParameter("end_key", String.format(  "[\"%s\",\"%d\",\"%d\"]", account, day.get(Calendar.YEAR), day.get(Calendar.MONTH)+1 ) );
+            urlBuilder.addQueryParameter("reduce", "true");
+            urlBuilder.addQueryParameter("group_level", "1");
+            urlBuilder.addQueryParameter("inclusive_end", "true");
 
-        String u = urlBuilder.build().toString();
+            String u = urlBuilder.build().toString();
 
-        Request request = new Request.Builder()
-            .url( u )
-            .header("Authorization", credential.getBasicAuth() )
-            .build();
-        
-        OkHttpClient client = new OkHttpClient.Builder().build();
+            Request request = new Request.Builder()
+                .url( u )
+                .header("Authorization", credential.getBasicAuth() )
+                .build();
+            
+            OkHttpClient client = new OkHttpClient.Builder().build();
 
-        Response response = client.newCall(request).execute();
+            Response response = client.newCall(request).execute();
 
-        ObjectMapper mapper = new ObjectMapper();
-        String body = response.body().string();
+            ObjectMapper mapper = new ObjectMapper();
+            ResponseBody rbody = response.body();
+            if( rbody != null ) {
+                String body = rbody.string();
+                JsonNode nodes = mapper.readTree( body );
 
-        // System.out.println( "request getAccountList : " + u.toString() );
-        // System.out.println( "body getAccountList : " + body );
-
-        JsonNode nodes = mapper.readTree( body );
-        if( nodes.isObject() ) {
-            JsonNode rows = nodes.get("rows");
-            if( rows.isArray() ) {
-                AccountSummary as = null;
-                for( JsonNode r : rows ) {
-                    String[] key = { r.get( "key").get(0).asText() };
-                    Float[] value = { 
-                        r.get( "value" ).get(0).floatValue(), 
-                        r.get( "value" ).get(1).floatValue(), 
-                        r.get( "value" ).get(2).floatValue() };
-                    as = AccountSummary.builder().key(key).value(value).build();
+                if( nodes.isObject() ) {
+                    JsonNode rows = nodes.get("rows");
+                    if( rows.isArray() ) {
+                        AccountSummary as = null;
+                        for( JsonNode r : rows ) {
+                            String[] key = { r.get( "key").get(0).asText() };
+                            Float[] value = { 
+                                r.get( "value" ).get(0).floatValue(), 
+                                r.get( "value" ).get(1).floatValue(), 
+                                r.get( "value" ).get(2).floatValue() };
+                            as = AccountSummary.builder().key(key).value(value).build();
+                        }
+                        return as;
+                    }
                 }
-                return as;
             }
         }
         return null;
