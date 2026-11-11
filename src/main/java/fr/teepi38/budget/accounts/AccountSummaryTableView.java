@@ -49,6 +49,8 @@ public class AccountSummaryTableView extends JPanel {
         add(pane);
     }
     
+    // TODO add a listener on this JTable
+    
     class AccountSummaryTableRenderer extends DefaultTableCellRenderer {
 
         @Override

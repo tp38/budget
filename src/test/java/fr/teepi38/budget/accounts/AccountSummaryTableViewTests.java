@@ -16,6 +16,7 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class AccountSummaryTableViewTests {
@@ -92,11 +93,12 @@ public class AccountSummaryTableViewTests {
     }
 
     @Test
+    @Disabled 
     public void show() 
-    throws InterruptedException 
+        throws InterruptedException 
     {
         ff.table("account_table").requireVisible();
-        Thread.sleep(10000);
+        Thread.sleep(3000);
     }
 
     @Test

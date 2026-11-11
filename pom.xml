@@ -8,8 +8,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>budget</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/tp38/budget</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -99,6 +98,13 @@
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.4.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+              <mainClass>fr.teepi38.budget.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

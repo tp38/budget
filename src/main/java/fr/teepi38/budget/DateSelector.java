@@ -30,7 +30,7 @@ public class DateSelector extends JPanel {
             dm = new SpinnerDateModel( initDate, earliestDate, latestDate, Calendar.DAY_OF_MONTH );
             JSpinner spinner = new JSpinner(dm);
             spinner.setName( "date_spinner" );
-            spinner.setPreferredSize( new Dimension(150, 20) );
+            spinner.setPreferredSize( new Dimension(150, 30) );
             spinner.setEditor( new JSpinner.DateEditor(spinner, "dd/MM/yyyy") );
             add( spinner );            
         } 
@@ -47,14 +47,20 @@ public class DateSelector extends JPanel {
         btn.addActionListener( l );
     }
 
-    String getDate() {
-        return sdf.format( dm.getDate() );
+    // String getDate() {
+    public Calendar getDate() {
+        // return sdf.format( dm.getDate() );
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime( dm.getDate() );
+        return calendar;
     }
     
-    String getLastDayOfMonth() {
+    // String getLastDayOfMonth() {
+    public Calendar getLastDayOfMonth() {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime( dm.getDate() );
         calendar.set( Calendar.DATE, calendar.getActualMaximum( Calendar.DAY_OF_MONTH ) );
-        return sdf.format( calendar.getTime() );
+        // return sdf.format( calendar.getTime() );
+        return calendar;
     }
 }

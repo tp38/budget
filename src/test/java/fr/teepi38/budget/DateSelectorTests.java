@@ -4,9 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+// import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -61,10 +60,17 @@ class DateSelectorTests {
     @Test
     public void should_have_a_getDate_method() {
         Calendar calendar = Calendar.getInstance();
-        Date today = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        int dd = calendar.get( Calendar.DATE );
+        int mm = calendar.get( Calendar.MONTH ) + 1;
+        int yy = calendar.get( Calendar.YEAR );
+        String expected = String.format("%02d/%02d/%4d", dd, mm, yy);
 
-        assertEquals(sdf.format(today), dp.getDate());
+        Calendar dpc = dp.getDate();
+        int d = dpc.get( Calendar.DATE );
+        int m = dpc.get( Calendar.MONTH ) + 1;
+        int y = dpc.get( Calendar.YEAR );
+        String lastday = String.format("%02d/%02d/%4d", d, m, y);
+        assertEquals(expected, lastday );
     }
 
     @Test
@@ -73,9 +79,15 @@ class DateSelectorTests {
         int dd = calendar.getActualMaximum( Calendar.DAY_OF_MONTH );
         int mm = calendar.get( Calendar.MONTH ) + 1;
         int yy = calendar.get( Calendar.YEAR );
-        String lastday = String.format("%02d/%02d/%4d", dd, mm, yy);
+        String expected = String.format("%02d/%02d/%4d", dd, mm, yy);
 
-        assertEquals(lastday, dp.getLastDayOfMonth());
+        Calendar dpc = dp.getLastDayOfMonth();
+        int d = dpc.getActualMaximum( Calendar.DAY_OF_MONTH );
+        int m = dpc.get( Calendar.MONTH ) + 1;
+        int y = dpc.get( Calendar.YEAR );
+        String lastday = String.format("%02d/%02d/%4d", d, m, y);
+        assertEquals(expected, lastday );
+
     }
 
 

@@ -1,16 +1,25 @@
 @startuml 'classes relatives à accountPanel'
 
-class AccountSummaryPanel
+class JPanel #PaleVioletRed
+class AccountSummaryPanel {
+    + AccountSummaryPanel( RelaxDb db )
+    - initTableModel( RelaxDb db ) : AccountSummaryTableModel
+}
 
-class DateSelector #LightGreen
+class DateSelector #LightGreen {
+    + addActionListener( ActionListener l) : void
+    + getDate() : Calendar
+    + getLastDayofMonth() : Calendar
+}
 
 class AccountSummaryTableView #LightGreen
 
-class RelaxDB {
-    + getAccountList() : String[]
-    + getAccountSummary( String key, DateSelector d ) : AccountSummary
+class RelaxDB #LightGreen {
+    + getAccountList() : Result[]
+    + getAccountSummary( String key, Calendar day ) : AccountSummary
 }
 
+AccountSummaryPanel -up-|> JPanel
 AccountSummaryPanel "ds" *-- DateSelector
 AccountSummaryPanel "ast" *-- AccountSummaryTableView
 AccountSummaryPanel -> RelaxDB
