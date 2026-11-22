@@ -1,0 +1,16 @@
+@startuml 'class liste des operations'
+
+class JPanel #PaleVioletRed
+class OperationsListPanel
+class OperationsListView
+class RelaxDb #LightGreen
+class OperationsListSelector
+interface OperationsListCallBack
+
+OperationsListPanel -up-|> JPanel
+OperationsListPanel "sel" *-- OperationsListSelector
+
+OperationsListPanel "list" *-- OperationsListView
+OperationsListCallBack <- OperationsListPanel
+OperationsListPanel "db" *- RelaxDb
+@enduml

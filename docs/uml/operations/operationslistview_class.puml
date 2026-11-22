@@ -1,0 +1,54 @@
+@startuml 'classes operationslistview'
+
+interface OperationsListCallBack #LightGreen {
+    + onCall()
+}
+
+class AbstractListModel #PaleVioletRed 
+class JList<OperationListModel> #PaleVioletRed {
+    - selectionMode = ListSelectionModel.SINGLE_SELECTION
+}
+class JPanel #PaleVioletRed 
+
+class Vector #Wheat
+
+class Operation {
+    - key : String[]
+    - value : float[]
+}
+
+class OperationsListModel
+
+class OperationsListView {
+    - parent : JFrame
+    - cb : CallBack
+    + setUpListData( OperationsListModel newModel )
+}
+
+class OVListener 
+interface ListSelectionListener #PaleVioletRed {
+    void valueChanged( ListSelectionListener e )
+}
+OVListener ..|> ListSelectionListener
+
+class DefaultTableCellRenderer #PaleVioletRed
+
+class OperationsListRenderer
+
+
+OperationsListView -up-|> JPanel 
+
+OperationsListModel --> Operation
+AbstractListModel <|- OperationsListModel
+AbstractListModel --> Vector
+OperationsListView "model" *-- OperationsListModel
+OperationsListView "ops_list" *- JList
+JList --> OperationsListRenderer
+JList --> OVListener
+
+OVListener --> OperationsListCallBack
+
+OperationsListRenderer --|> DefaultTableCellRenderer
+
+
+@enduml

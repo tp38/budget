@@ -1,0 +1,11 @@
+@startuml 'classes operationslistselector'
+
+class JPanel #PaleVioletRed
+class JButton #PaleVioletRed
+class OperationsListSelector
+
+OperationsListSelector -up-|> JPanel
+OperationsListSelector "5" *-- JButton
+
+@enduml
+
